@@ -34,6 +34,7 @@ int64_t parse_time_string(const string& time)
   str << time.substr(0,2);
   int64_t mins;
   str >> mins;
+  str.clear();
   str << time.substr(2,2);
   int64_t secs;
   str >> secs;
@@ -65,7 +66,7 @@ int main(int argc, char** argv)
       const char* col = strchr(argv[i+1],':');
       start = parse_time_string(argv[i+1]);
       if (col)
-        end = parse_time_string(col);
+        end = parse_time_string(col+1);
     }
   }
   void* dll = dlopen(lib.c_str(),RTLD_NOW);
@@ -92,9 +93,7 @@ int main(int argc, char** argv)
        << " to " << (outputfile.empty()?"stdout":outputfile) << " using " 
        << lib << endl
        << "Outputting from position " << start/1000 << " to position " 
-       << end/1000 << endl
-       << "Outputting " << info->channels << "@"<<info->bitrate << "-"
-       << info->samplerate << endl;
+       << end/1000 << endl;
 
   char buffer[8192];
   int64_t data = (end-start)/1000*info->channels
@@ -107,8 +106,10 @@ int main(int argc, char** argv)
     format |= SF_FORMAT_PCM_16;
   if (info->bitrate/8 == 3)
     format |= SF_FORMAT_PCM_24;
-  SndfileHandle output(outputfile.c_str(),SFM_WRITE,format,info->channels,info->samplerate);
+  SndfileHandle output(outputfile.c_str(),SFM_WRITE,
+                       format,info->channels,info->samplerate);
 
+  codec.Seek(info,start);
   unsigned int size;
   while (data > 0 && 
          codec.ReadPCM(info,buffer,data<8192?data:8192,&size) == READ_SUCCESS)
