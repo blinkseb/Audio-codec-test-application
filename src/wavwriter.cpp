@@ -74,7 +74,7 @@ int main(int argc, char** argv)
   AudioCodec codec;
   get_addon(&codec);
   
-  if (!codec.Init || !codec.DeInit || !codec.ReadPCM)
+  if (!codec.Init || !codec.DeInit || !codec.ReadPCM || !codec.Seek)
   {
     cerr << "Failed to load audio codec library." << endl;
     return 2;
@@ -119,6 +119,7 @@ int main(int argc, char** argv)
     output.write((const short int*)buffer,size/(info->bitrate/8));
     data -= size;
   }
+  codec.DeInit(info);
 
   dlclose(dll);
 
