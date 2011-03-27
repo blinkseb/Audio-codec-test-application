@@ -1,0 +1,9 @@
+OSX-only pre-steps:
+make -C toos/osx/osx-depends
+make -C toos/osx/osx-depends/bootstrap
+
+Standard build procedure;
+
+./bootstrap
+CXXFLAGS=-I<path to xbmc add-on headers> ./configure
+make
