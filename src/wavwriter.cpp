@@ -86,7 +86,11 @@ int main(int argc, char** argv)
     cerr << "Failed to load audio file." << endl;
     return 3;
   }
+  if (start < 0)
+    start = 0;
   if (end == -1)
+    end = info->totaltime;
+  if (end > info->totaltime)
     end = info->totaltime;
 
   cerr << "Outputting track " << track << " from " << file 
