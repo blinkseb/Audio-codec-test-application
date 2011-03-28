@@ -1,4 +1,5 @@
 OSX-only pre-steps:
+==================
 make -C toos/osx/osx-depends
 make -C toos/osx/osx-depends/bootstrap
 
@@ -7,3 +8,10 @@ Standard build procedure;
 ./bootstrap
 CXXFLAGS=-I<path to xbmc add-on headers> ./configure
 make
+
+WIN32-only steps:
+==================
+1. Set Environmental Variable XBMC_AUDIO_CODEC_TEST_INCLUDES
+   to the path where "xbmc_ac_types.h" is located
+2. Go to tools/win32
+3. Run BuildSetup.bat

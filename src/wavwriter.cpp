@@ -3,7 +3,12 @@
 #include <cstdlib>
 #include <string>
 #include <sstream>
+
+#if defined(_WIN32)
+#include "windows.h"
+#else
 #include <dlfcn.h>
+#endif
 #include <stdint.h>
 #include <cstdio>
 
@@ -11,6 +16,25 @@
 #include <sndfile.hh>
 
 #include "xbmc_ac_types.h"
+
+#if defined(_WIN32)
+#define DLHANDLE void *
+#define DLOPEN(name, mode) LoadLibraryA(name)
+#define DLSYM(handle, symbol) GetProcAddress((HMODULE)handle, symbol)
+#define DLCLOSE(handle) CloseHandle(handle)
+#elif defined(DLOPEN_POSIX)
+#define DLHANDLE void *
+#define DLOPEN(name, mode) dlopen((name), mode)
+#define DLSYM(handle, symbol) dlsym((handle), (symbol))
+#define DLCLOSE(handle) dlclose(handle)
+#define DLERROR() dlerror()
+#elif defined(DLOPEN_LIBTOOL)
+#define DLHANDLE lt_dlhandle
+#define DLOPEN(name, mode) lt_dlopen(name)
+#define DLSYM(handle, symbol) lt_dlsym((handle), (symbol))
+#define DLCLOSE(handle) lt_dlclose(handle)
+#define DLERROR() lt_dlerror()
+#endif
 
 using namespace std;
 
@@ -69,8 +93,8 @@ int main(int argc, char** argv)
         end = parse_time_string(col+1);
     }
   }
-  void* dll = dlopen(lib.c_str(),RTLD_NOW);
-  get_addont get_addon = (get_addont)dlsym(dll,"get_addon");
+  void* dll = DLOPEN(lib.c_str(), RTLD_NOW);
+  get_addont get_addon = (get_addont)DLSYM(dll, "get_addon");
   AudioCodec codec;
   get_addon(&codec);
   
@@ -125,7 +149,7 @@ int main(int argc, char** argv)
   }
   codec.DeInit(info);
 
-  dlclose(dll);
+  DLCLOSE(dll);
 
   return 0;
 }

@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "wavwriter", "wavwriter.vcxproj", "{8EE3A9FA-CA45-483F-9817-E3FE9EC17267}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8EE3A9FA-CA45-483F-9817-E3FE9EC17267}.Debug|Win32.ActiveCfg = Debug|Win32
+		{8EE3A9FA-CA45-483F-9817-E3FE9EC17267}.Debug|Win32.Build.0 = Debug|Win32
+		{8EE3A9FA-CA45-483F-9817-E3FE9EC17267}.Release|Win32.ActiveCfg = Release|Win32
+		{8EE3A9FA-CA45-483F-9817-E3FE9EC17267}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
