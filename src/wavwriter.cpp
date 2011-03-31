@@ -21,7 +21,7 @@
 #define DLHANDLE void *
 #define DLOPEN(name, mode) LoadLibraryA(name)
 #define DLSYM(handle, symbol) GetProcAddress((HMODULE)handle, symbol)
-#define DLCLOSE(handle) CloseHandle(handle)
+#define DLCLOSE(handle) FreeLibrary((HMODULE) handle)
 #elif defined(DLOPEN_POSIX)
 #define DLHANDLE void *
 #define DLOPEN(name, mode) dlopen((name), mode)
@@ -103,7 +103,6 @@ int main(int argc, char** argv)
     cerr << "Failed to load audio codec library." << endl;
     return 2;
   }
-
   AC_INFO* info = codec.Init(file.c_str(),track);
   if (!info)
   {
