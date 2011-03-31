@@ -124,14 +124,14 @@ int main(int argc, char** argv)
 
   char buffer[8192];
   int64_t data = (end-start)/1000*info->channels
-                                 *info->samplerate*info->bitrate/8;
+                                 *info->samplerate*info->bitpersample /8;
 
   int format = SF_FORMAT_WAV;
-  if (info->bitrate == 8)
+  if (info->bitpersample == 8)
     format |= SF_FORMAT_PCM_S8;
-  if (info->bitrate == 16)
+  if (info->bitpersample == 16)
     format |= SF_FORMAT_PCM_16;
-  if (info->bitrate/8 == 3)
+  if (info->bitpersample/8 == 3)
     format |= SF_FORMAT_PCM_24;
   SndfileHandle output(outputfile.c_str(),SFM_WRITE,
                        format,info->channels,info->samplerate);
@@ -143,7 +143,7 @@ int main(int argc, char** argv)
   {
     if (size == 0)
       break;
-    output.write((const short int*)buffer,size/(info->bitrate/8));
+    output.write((const short int*)buffer,size/(info->bitpersample/8));
     data -= size;
   }
   codec.DeInit(info);
